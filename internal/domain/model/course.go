@@ -1,5 +1,5 @@
 package model
 
 type Course struct {
-	Name string
+	Name string `json:"name,omitempty"`
 }
