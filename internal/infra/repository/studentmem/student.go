@@ -9,6 +9,8 @@ import (
 )
 
 type Repository struct {
+	// You can modify the map by utilizing sync.Map instead of supplying it with a lock.
+	// The inclusion of a lock in this instance is solely intended for demonstration purposes.
 	students map[uint64]model.Student
 	lock     sync.RWMutex
 }
