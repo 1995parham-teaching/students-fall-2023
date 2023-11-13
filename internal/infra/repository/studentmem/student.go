@@ -18,6 +18,7 @@ type Repository struct {
 func New() *Repository {
 	return &Repository{
 		students: make(map[uint64]model.Student),
+		lock:     sync.RWMutex{},
 	}
 }
 
@@ -35,6 +36,7 @@ func (r *Repository) Add(_ context.Context, model model.Student) error {
 	return nil
 }
 
+// nolint: cyclop
 func (r *Repository) Get(_ context.Context, cmd studentrepo.GetCommand) []model.Student {
 	r.lock.RLock()
 	defer r.lock.RUnlock()
@@ -59,20 +61,25 @@ func (r *Repository) Get(_ context.Context, cmd studentrepo.GetCommand) []model.
 			if students[i].FirstName != *cmd.FirstName {
 				students = append(students[:i], students[i+1:]...)
 				i--
+
 				continue
 			}
 		}
+
 		if cmd.LastName != nil {
 			if students[i].LastName != *cmd.LastName {
 				students = append(students[:i], students[i+1:]...)
 				i--
+
 				continue
 			}
 		}
+
 		if cmd.EntranceYear != nil {
 			if students[i].EntranceYear != *cmd.EntranceYear {
 				students = append(students[:i], students[i+1:]...)
 				i--
+
 				continue
 			}
 		}

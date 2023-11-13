@@ -23,8 +23,7 @@ func NewStudent(repo studentrepo.Repository) *Student {
 }
 
 func (s *Student) GetByID(c echo.Context) error {
-	idStr := c.Param("id")
-	id, err := strconv.ParseUint(idStr, 10, 64)
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 		return echo.ErrBadRequest
 	}
@@ -48,21 +47,17 @@ func (s *Student) GetByID(c echo.Context) error {
 
 func (s *Student) Get(c echo.Context) error {
 	var idPtr *uint64
-	idStr := c.QueryParam("id")
-	id, err := strconv.ParseUint(idStr, 10, 64)
-	if err == nil {
+	if id, err := strconv.ParseUint(c.QueryParam("id"), 10, 64); err == nil {
 		idPtr = &id
 	}
 
 	var fnPtr *string
-	fn := c.QueryParam("name")
-	if fn != "" {
+	if fn := c.QueryParam("name"); fn != "" {
 		fnPtr = &fn
 	}
 
 	var lnPtr *string
-	ln := c.QueryParam("family")
-	if ln != "" {
+	if ln := c.QueryParam("family"); ln != "" {
 		lnPtr = &ln
 	}
 
@@ -90,6 +85,7 @@ func (s *Student) Create(c echo.Context) error {
 		return echo.ErrBadRequest
 	}
 
+	// nolint: gosec, gomnd
 	id := rand.Uint64() % 1_000_000
 	if err := s.repo.Add(c.Request().Context(), model.Student{
 		ID:           id,
