@@ -55,15 +55,21 @@ func (s *Student) Get(c echo.Context) error {
 	}
 
 	var fnPtr *string
-	fn := c.QueryParam("first_name")
+	fn := c.QueryParam("name")
 	if fn != "" {
 		fnPtr = &fn
+	}
+
+	var lnPtr *string
+	ln := c.QueryParam("family")
+	if ln != "" {
+		lnPtr = &ln
 	}
 
 	students := s.repo.Get(c.Request().Context(), studentrepo.GetCommand{
 		ID:           idPtr,
 		FirstName:    fnPtr,
-		LastName:     nil,
+		LastName:     lnPtr,
 		EntranceYear: nil,
 	})
 	if len(students) == 0 {
