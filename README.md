@@ -40,21 +40,26 @@ go build
 Student creation request:
 
 ```bash
-curl 127.0.0.1:1373/v1/students -X POST -H 'Content-Type: application/json' -d '{ "name": "Parham Alvani" }'
+curl 127.0.0.1:1373/students/ -X POST -H 'Content-Type: application/json' -d '{ "name": "Parham", "family": "Alvani" }'
 ```
 
 ```json
-{ "name": "Parham Alvani", "id": "89846857", "courses": null }
+711378
 ```
 
+Create request will create a random student number, so you can insert students that have same name and family.
 Student list request:
 
 ```bash
-curl 127.0.0.1:1373/v1/students
+curl 127.0.0.1:1373/v1/students/
 ```
 
 ```json
-[{ "name": "Parham Alvani", "id": "89846857", "courses": [] }]
+[
+  { "id": 644366, "first_name": "Parham", "last_name": "Alvani" },
+  { "id": 917946, "first_name": "Parham", "last_name": "الوانی" },
+  { "id": 711378, "first_name": "Parham", "last_name": "الوانی" }
+]
 ```
 
 Course creation request:
