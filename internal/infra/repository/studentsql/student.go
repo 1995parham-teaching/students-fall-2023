@@ -28,6 +28,7 @@ func New(db *gorm.DB) *Repository {
 }
 
 func (r *Repository) Add(ctx context.Context, model model.Student) error {
+	// nolint: exhaustruct
 	tx := r.db.WithContext(ctx).Create(StudentDTO{Student: model})
 	if tx.Error != nil {
 		if errors.Is(tx.Error, gorm.ErrDuplicatedKey) {
@@ -40,7 +41,6 @@ func (r *Repository) Add(ctx context.Context, model model.Student) error {
 	return nil
 }
 
-// nolint: cyclop
 func (r *Repository) Get(_ context.Context, cmd studentrepo.GetCommand) []model.Student {
 	var studentDTOs []StudentDTO
 
