@@ -3,10 +3,10 @@ package main
 import (
 	"log"
 
-	"github.com/1995parham-teaching/students-fall-2023/internal/domain/model"
 	"github.com/1995parham-teaching/students-fall-2023/internal/domain/repository/studentrepo"
 	"github.com/1995parham-teaching/students-fall-2023/internal/infra/http/handler"
 	"github.com/1995parham-teaching/students-fall-2023/internal/infra/repository/studentmem"
+	"github.com/1995parham-teaching/students-fall-2023/internal/infra/repository/studentsql"
 	"github.com/labstack/echo/v4"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -18,7 +18,7 @@ func main() {
 		log.Fatalf("failed to connect database %v", err)
 	}
 
-	if err := db.AutoMigrate(new(model.Student), new(model.Course)); err != nil {
+	if err := db.AutoMigrate(new(studentsql.StudentDTO)); err != nil {
 		log.Fatalf("failed to run migrations %v", err)
 	}
 
