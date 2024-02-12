@@ -6,7 +6,7 @@ require (
 	github.com/go-playground/validator/v10 v10.17.0
 	github.com/labstack/echo/v4 v4.11.4
 	gorm.io/driver/sqlite v1.5.4
-	gorm.io/gorm v1.25.6
+	gorm.io/gorm v1.25.7
 )
 
 require (
