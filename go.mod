@@ -3,7 +3,7 @@ module github.com/1995parham-teaching/students-fall-2023
 go 1.22
 
 require (
-	github.com/go-playground/validator/v10 v10.18.0
+	github.com/go-playground/validator/v10 v10.19.0
 	github.com/labstack/echo/v4 v4.11.4
 	gorm.io/driver/sqlite v1.5.5
 	gorm.io/gorm v1.25.7
