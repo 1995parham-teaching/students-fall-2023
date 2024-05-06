@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/1995parham-teaching/students-fall-2023/internal/common/fp"
 	"github.com/1995parham-teaching/students-fall-2023/internal/domain/model"
 	"github.com/1995parham-teaching/students-fall-2023/internal/domain/repository/studentrepo"
 	"github.com/1995parham-teaching/students-fall-2023/internal/infra/repository/studentmem"
@@ -62,6 +63,18 @@ func (suite *StudentsInMemorySuite) TestGet() {
 		})
 
 		require.Len(st, 2)
+	})
+
+	suite.Run("find students that has parham as their first name", func() {
+		st := suite.repo.Get(context.Background(), studentrepo.GetCommand{
+			ID:           nil,
+			FirstName:    fp.Optional("Parham"),
+			LastName:     nil,
+			EntranceYear: nil,
+		})
+
+		require.Len(st, 1)
+		require.Equal("Alvani", st[0].LastName)
 	})
 }
 
