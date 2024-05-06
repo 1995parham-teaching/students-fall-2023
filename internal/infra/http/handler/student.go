@@ -85,7 +85,7 @@ func (s *Student) Create(c echo.Context) error {
 		return echo.ErrBadRequest
 	}
 
-	// nolint: gosec, gomnd
+	// nolint: gosec, mnd
 	id := rand.Uint64() % 1_000_000
 	if err := s.repo.Add(c.Request().Context(), model.Student{
 		ID:           id,
