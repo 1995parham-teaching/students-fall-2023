@@ -1,8 +1,6 @@
 module github.com/1995parham-teaching/students-fall-2023
 
-go 1.23.0
-
-toolchain go1.24.1
+go 1.24
 
 require (
 	github.com/go-playground/validator/v10 v10.26.0
