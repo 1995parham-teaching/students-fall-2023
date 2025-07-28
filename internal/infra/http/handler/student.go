@@ -47,7 +47,9 @@ func (s *Student) GetByID(c echo.Context) error {
 
 func (s *Student) Get(c echo.Context) error {
 	var idPtr *uint64
-	if id, err := strconv.ParseUint(c.QueryParam("id"), 10, 64); err == nil {
+
+	id, err := strconv.ParseUint(c.QueryParam("id"), 10, 64)
+	if err == nil {
 		idPtr = &id
 	}
 
@@ -77,23 +79,27 @@ func (s *Student) Get(c echo.Context) error {
 func (s *Student) Create(c echo.Context) error {
 	var req request.StudentCreate
 
-	if err := c.Bind(&req); err != nil {
+	err := c.Bind(&req)
+	if err != nil {
 		return echo.ErrBadRequest
 	}
 	// we have the filled request
-	if err := req.Validate(); err != nil {
+	err = req.Validate()
+	if err != nil {
 		return echo.ErrBadRequest
 	}
 
 	// nolint: gosec, mnd
 	id := rand.Uint64() % 1_000_000
-	if err := s.repo.Add(c.Request().Context(), model.Student{
+
+	err = s.repo.Add(c.Request().Context(), model.Student{
 		ID:           id,
 		FirstName:    req.Name,
 		LastName:     req.Family,
 		EntranceYear: 0,
 		Courses:      []model.Course{},
-	}); err != nil {
+	})
+	if err != nil {
 		if errors.Is(err, studentrepo.ErrStudentIDDuplicate) {
 			return echo.ErrBadRequest
 		}

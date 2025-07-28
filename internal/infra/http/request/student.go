@@ -14,7 +14,8 @@ type StudentCreate struct {
 func (sc StudentCreate) Validate() error {
 	validate := validator.New(validator.WithRequiredStructEnabled())
 
-	if err := validate.Struct(sc); err != nil {
+	err := validate.Struct(sc)
+	if err != nil {
 		return fmt.Errorf("create request validation failed %w", err)
 	}
 

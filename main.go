@@ -18,7 +18,8 @@ func main() {
 		log.Fatalf("failed to connect database %v", err)
 	}
 
-	if err := db.AutoMigrate(new(studentsql.StudentDTO)); err != nil {
+	err = db.AutoMigrate(new(studentsql.StudentDTO))
+	if err != nil {
 		log.Fatalf("failed to run migrations %v", err)
 	}
 
@@ -29,7 +30,8 @@ func main() {
 	h := handler.NewStudent(repo)
 	h.Register(app.Group("students/"))
 
-	if err := app.Start("0.0.0.0:1373"); err != nil {
+	err = app.Start("0.0.0.0:1373")
+	if err != nil {
 		log.Fatalf("server failed to start %v", err)
 	}
 }

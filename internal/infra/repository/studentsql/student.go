@@ -12,6 +12,7 @@ import (
 
 type StudentDTO struct {
 	model.Student
+
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt gorm.DeletedAt `gorm:"index"`
