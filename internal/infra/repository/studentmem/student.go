@@ -38,8 +38,7 @@ func (r *Repository) Add(_ context.Context, model model.Student) error {
 	return nil
 }
 
-// nolint: cyclop
-func (r *Repository) Get(_ context.Context, cmd studentrepo.GetCommand) []model.Student {
+func (r *Repository) Get(_ context.Context, cmd studentrepo.GetCommand) []model.Student { // nolint: cyclop
 	r.lock.RLock()
 	defer r.lock.RUnlock()
 
