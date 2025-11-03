@@ -7,7 +7,7 @@ require (
 	github.com/labstack/echo/v4 v4.13.4
 	github.com/stretchr/testify v1.11.1
 	gorm.io/driver/sqlite v1.6.0
-	gorm.io/gorm v1.31.0
+	gorm.io/gorm v1.31.1
 )
 
 require (
