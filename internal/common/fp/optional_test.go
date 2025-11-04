@@ -10,7 +10,7 @@ import (
 func TestOptional(t *testing.T) {
 	t.Parallel()
 
-	cases := []interface{}{
+	cases := []any{
 		"Parham",
 		1373,
 		"Elahe",
