@@ -23,17 +23,14 @@ func New() *Repository {
 }
 
 func (r *Repository) Add(_ context.Context, model model.Student) error {
-	r.lock.RLock()
+	r.lock.Lock()
+	defer r.lock.Unlock()
 
 	if _, ok := r.students[model.ID]; ok {
 		return studentrepo.ErrStudentIDDuplicate
 	}
 
-	r.lock.RUnlock()
-
-	r.lock.Lock()
 	r.students[model.ID] = model
-	r.lock.Unlock()
 
 	return nil
 }
