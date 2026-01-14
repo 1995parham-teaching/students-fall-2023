@@ -79,27 +79,24 @@ func (s *Student) Get(c echo.Context) error {
 func (s *Student) Create(c echo.Context) error {
 	var req request.StudentCreate
 
-	err := c.Bind(&req)
-	if err != nil {
+	if err := c.Bind(&req); err != nil {
 		return echo.ErrBadRequest
 	}
-	// we have the filled request
-	err = req.Validate()
-	if err != nil {
+
+	if err := req.Validate(); err != nil {
 		return echo.ErrBadRequest
 	}
 
 	// nolint: gosec, mnd
 	id := rand.Uint64() % 1_000_000
 
-	err = s.repo.Add(c.Request().Context(), model.Student{
+	if err := s.repo.Add(c.Request().Context(), model.Student{
 		ID:           id,
 		FirstName:    req.Name,
 		LastName:     req.Family,
 		EntranceYear: 0,
 		Courses:      []model.Course{},
-	})
-	if err != nil {
+	}); err != nil {
 		if errors.Is(err, studentrepo.ErrStudentIDDuplicate) {
 			return echo.ErrBadRequest
 		}

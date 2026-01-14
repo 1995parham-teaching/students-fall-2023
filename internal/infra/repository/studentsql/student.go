@@ -30,13 +30,12 @@ func New(db *gorm.DB) *Repository {
 
 func (r *Repository) Add(ctx context.Context, model model.Student) error {
 	// nolint: exhaustruct
-	tx := r.db.WithContext(ctx).Create(StudentDTO{Student: model})
-	if tx.Error != nil {
-		if errors.Is(tx.Error, gorm.ErrDuplicatedKey) {
+	if err := r.db.WithContext(ctx).Create(StudentDTO{Student: model}).Error; err != nil {
+		if errors.Is(err, gorm.ErrDuplicatedKey) {
 			return studentrepo.ErrStudentIDDuplicate
 		}
 
-		return tx.Error
+		return err
 	}
 
 	return nil
@@ -63,7 +62,7 @@ func (r *Repository) Get(_ context.Context, cmd studentrepo.GetCommand) []model.
 		condition.EntranceYear = *cmd.EntranceYear
 	}
 
-	if err := r.db.Where(&condition).Find(&studentDTOs); err != nil {
+	if err := r.db.Where(&condition).Find(&studentDTOs).Error; err != nil {
 		return nil
 	}
 
