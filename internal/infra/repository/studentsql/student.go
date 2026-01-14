@@ -11,8 +11,9 @@ import (
 )
 
 type StudentDTO struct {
-	model.Student
+	model.Student `gorm:"embedded"`
 
+	ID        uint64         `gorm:"primaryKey;autoIncrement:false"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt gorm.DeletedAt `gorm:"index"`
@@ -30,7 +31,7 @@ func New(db *gorm.DB) *Repository {
 
 func (r *Repository) Add(ctx context.Context, model model.Student) error {
 	// nolint: exhaustruct
-	if err := r.db.WithContext(ctx).Create(StudentDTO{Student: model}).Error; err != nil {
+	if err := r.db.WithContext(ctx).Create(StudentDTO{ID: model.ID, Student: model}).Error; err != nil {
 		if errors.Is(err, gorm.ErrDuplicatedKey) {
 			return studentrepo.ErrStudentIDDuplicate
 		}
@@ -41,7 +42,7 @@ func (r *Repository) Add(ctx context.Context, model model.Student) error {
 	return nil
 }
 
-func (r *Repository) Get(_ context.Context, cmd studentrepo.GetCommand) []model.Student {
+func (r *Repository) Get(ctx context.Context, cmd studentrepo.GetCommand) []model.Student {
 	var studentDTOs []StudentDTO
 
 	var condition StudentDTO
@@ -62,7 +63,7 @@ func (r *Repository) Get(_ context.Context, cmd studentrepo.GetCommand) []model.
 		condition.EntranceYear = *cmd.EntranceYear
 	}
 
-	if err := r.db.Where(&condition).Find(&studentDTOs).Error; err != nil {
+	if err := r.db.WithContext(ctx).Where(&condition).Find(&studentDTOs).Error; err != nil {
 		return nil
 	}
 
@@ -70,6 +71,7 @@ func (r *Repository) Get(_ context.Context, cmd studentrepo.GetCommand) []model.
 
 	for index, dto := range studentDTOs {
 		students[index] = dto.Student
+		students[index].ID = dto.ID
 	}
 
 	return students

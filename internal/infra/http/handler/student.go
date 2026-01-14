@@ -1,8 +1,9 @@
 package handler
 
 import (
+	"crypto/rand"
 	"errors"
-	"math/rand"
+	"math/big"
 	"net/http"
 	"strconv"
 
@@ -69,9 +70,6 @@ func (s *Student) Get(c echo.Context) error {
 		LastName:     lnPtr,
 		EntranceYear: nil,
 	})
-	if len(students) == 0 {
-		return echo.ErrNotFound
-	}
 
 	return c.JSON(http.StatusOK, students)
 }
@@ -84,11 +82,16 @@ func (s *Student) Create(c echo.Context) error {
 	}
 
 	if err := req.Validate(); err != nil {
-		return echo.ErrBadRequest
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	// nolint: gosec, mnd
-	id := rand.Uint64() % 1_000_000
+	// nolint: mnd
+	randID, err := rand.Int(rand.Reader, big.NewInt(1_000_000))
+	if err != nil {
+		return echo.ErrInternalServerError
+	}
+
+	id := randID.Uint64()
 
 	if err := s.repo.Add(c.Request().Context(), model.Student{
 		ID:           id,
@@ -110,5 +113,5 @@ func (s *Student) Create(c echo.Context) error {
 func (s *Student) Register(g *echo.Group) {
 	g.GET("", s.Get)
 	g.POST("", s.Create)
-	g.GET(":id", s.GetByID)
+	g.GET("/:id", s.GetByID)
 }
