@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 
 	"github.com/1995parham-teaching/students-fall-2023/internal/domain/repository/studentrepo"
@@ -13,25 +14,41 @@ import (
 )
 
 func main() {
-	db, err := gorm.Open(sqlite.Open("students.db"), new(gorm.Config))
-	if err != nil {
-		log.Fatalf("failed to connect database %v", err)
-	}
+	storage := flag.String("storage", "memory", "storage type: memory or sqlite")
+	dbPath := flag.String("db", "students.db", "path to SQLite database file")
 
-	err = db.AutoMigrate(new(studentsql.StudentDTO))
-	if err != nil {
-		log.Fatalf("failed to run migrations %v", err)
+	flag.Parse()
+
+	var repo studentrepo.Repository
+
+	switch *storage {
+	case "sqlite":
+		db, err := gorm.Open(sqlite.Open(*dbPath), new(gorm.Config))
+		if err != nil {
+			log.Fatalf("failed to connect database %v", err)
+		}
+
+		if err := db.AutoMigrate(new(studentsql.StudentDTO)); err != nil {
+			log.Fatalf("failed to run migrations %v", err)
+		}
+
+		repo = studentsql.New(db)
+
+		log.Printf("using sqlite storage: %s", *dbPath)
+	case "memory":
+		repo = studentmem.New()
+
+		log.Println("using in-memory storage")
+	default:
+		log.Fatalf("unknown storage type: %s (use 'memory' or 'sqlite')", *storage)
 	}
 
 	app := echo.New()
 
-	var repo studentrepo.Repository = studentmem.New()
-
 	h := handler.NewStudent(repo)
 	h.Register(app.Group("students/"))
 
-	err = app.Start("0.0.0.0:1373")
-	if err != nil {
+	if err := app.Start("0.0.0.0:1373"); err != nil {
 		log.Fatalf("server failed to start %v", err)
 	}
 }
