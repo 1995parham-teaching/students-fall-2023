@@ -4,7 +4,7 @@ go 1.25.0
 
 require (
 	github.com/go-playground/validator/v10 v10.30.3
-	github.com/labstack/echo/v4 v4.15.2
+	github.com/labstack/echo/v4 v4.15.3
 	github.com/stretchr/testify v1.11.1
 	gorm.io/driver/sqlite v1.6.0
 	gorm.io/gorm v1.31.1
