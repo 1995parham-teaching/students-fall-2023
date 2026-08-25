@@ -30,7 +30,7 @@ func New(db *gorm.DB) *Repository {
 }
 
 func (r *Repository) Add(ctx context.Context, model model.Student) error {
-	// nolint: exhaustruct
+	//nolint:exhaustruct,exhaustruct_v5
 	if err := r.db.WithContext(ctx).Create(StudentDTO{ID: model.ID, Student: model}).Error; err != nil {
 		if errors.Is(err, gorm.ErrDuplicatedKey) {
 			return studentrepo.ErrStudentIDDuplicate
