@@ -13,7 +13,7 @@ import (
 type StudentDTO struct {
 	model.Student `gorm:"embedded"`
 
-	ID        uint64         `gorm:"primaryKey;autoIncrement:false"`
+	ID        uint64 `gorm:"primaryKey;autoIncrement:false"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt gorm.DeletedAt `gorm:"index"`
