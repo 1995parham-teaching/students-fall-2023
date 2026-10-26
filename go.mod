@@ -4,7 +4,7 @@ go 1.27.0
 
 require (
 	github.com/go-playground/validator/v10 v10.30.5
-	github.com/labstack/echo/v4 v4.16.0
+	github.com/labstack/echo/v4 v4.16.2
 	github.com/stretchr/testify v1.12.1
 	gorm.io/driver/sqlite v1.6.0
 	gorm.io/gorm v1.31.2
@@ -25,7 +25,7 @@ require (
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	go.yaml.in/yaml/v3 v3.0.5 // indirect
 	golang.org/x/crypto v0.57.0 // indirect
-	golang.org/x/net v0.59.0 // indirect
+	golang.org/x/net v0.60.0 // indirect
 	golang.org/x/sys v0.48.0 // indirect
 	golang.org/x/text v0.42.0 // indirect
 )
